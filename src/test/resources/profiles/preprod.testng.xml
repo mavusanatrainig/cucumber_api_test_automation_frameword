@@ -1,0 +1,15 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="Suite1" verbose="1" >
+
+    <test name="Regression">
+        <parameter name="environment" value="preprod"/>
+        <parameter name="url" value="https://www.facebook.com"/>
+        <parameter name="username" value="mavusana"></parameter>
+        <parameter name="password" value="kamo"></parameter>
+        <parameter name="browser" value="firefox"></parameter>
+        <classes>
+            <class name="TestRunnerTestng"/>
+        </classes>
+    </test>
+</suite>

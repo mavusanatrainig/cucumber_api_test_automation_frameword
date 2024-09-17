@@ -1,0 +1,11 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="Suite1" verbose="1" >
+    <test name="Regression">
+        <parameter name="environment" value="uat"/>
+        <parameter name="url" value="https://restful-booker.herokuapp.com"/>
+
+        <classes>
+            <class name="TestRunnerParallel"/>
+        </classes>
+    </test>
+</suite>

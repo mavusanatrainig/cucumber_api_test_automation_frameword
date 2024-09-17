@@ -1,0 +1,1 @@
+{fisrtname=Veli, lastname=Zuma, totalPrice=2500, depositPaid=500, checkin=2024-09-17, checkout=2024-09-22, additionalNeeds=Breakfast}
