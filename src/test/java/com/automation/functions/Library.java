@@ -17,7 +17,15 @@ public class Library {
         StringWriter writer = new StringWriter();
         Template template1;
         template1 = velocityEngine.getTemplate(template);
-        data.forEach((k,v)->context.put(k,v));
+        data.forEach((k,v)->{
+            if(v.equals("-")){
+
+            }else{
+                data.put(k,v);
+            }
+
+            context.put(k,v);
+        });
         template1.merge(context,writer);
         return writer.toString();
 

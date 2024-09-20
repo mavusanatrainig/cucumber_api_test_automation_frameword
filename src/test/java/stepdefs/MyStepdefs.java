@@ -27,16 +27,19 @@ public class MyStepdefs {
     private RequestSpecification request;
     private Map<String,String> headers;
     private String payload;
-    private String myBookingId;
+
 
     @BeforeStep
     public void startup(Scenario scenario){
        this.scenario = scenario;
+
     }
 
 
     @When("I get a author using id as {string} and url {string}")
     public void iGetAAuthorUsingIdAsAndUrl(String arg0, String arg1) {
+
+        RestAssured.baseURI="https://restful-booker.herokuapp.com";
         headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
 
@@ -57,8 +60,8 @@ public class MyStepdefs {
     }
 
 
-    @Then("The system respond with status code {int}")
-    public void theSystemRespondWithStatusCode(int arg0) {
+    @Then("The system responds with status code {int}")
+    public void theSystemRespondsWithStatusCode(int arg0) {
         assertThat(response.getStatusCode(),is(arg0));
     }
 
@@ -71,6 +74,7 @@ public class MyStepdefs {
     @When("I enter the following data")
     public void iEnterTheFollowingData(DataTable data) {
         Map<String,String> map = data.transpose().asMap();
+        Constants.dataMap = map;
         payload = Library.createPayLoad("src/test/resources/templates/createBooking.tpl",map);
         scenario.log(payload);
     }
@@ -93,8 +97,44 @@ public class MyStepdefs {
 
     @And("the system displayes the booking ID")
     public void theSystemDisplayesTheBookingID() {
-        String bookingId = response.getBody().jsonPath().getString("bookingid");
-        scenario.log(bookingId);
-        assertThat(bookingId,is(notNullValue()));
+        Constants.bookingID = response.getBody().jsonPath().getString("bookingid");
+        scenario.log(Constants.bookingID);
+
+        assertThat(Constants.bookingID,is(notNullValue()));
+    }
+
+    @When("I get a booking using bookingid")
+    public void iGetABookingUsingBookingid() {
+
+        System.out.println( "/booking/"+Constants.bookingID);
+        scenario.log("/booking/" +Constants.bookingID);
+       // RestAssured.baseURI="https://restful-booker.herokuapp.com";
+        headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+
+        request = RestAssured.given();
+        response = request
+                .headers(headers)
+                .get(  "/booking/"+Constants.bookingID);
+
+       // scenario.log(Constants.bookingID);
+        scenario.log("Response Get "+ response.getBody().prettyPrint());
+
+    }
+
+
+
+
+
+    @And("Validate the booking id")
+    public void validateTheBookingId() {
+
+        assertThat(response.body().jsonPath().getString("totalprice"),is(Constants.dataMap.get("totalprice")));
+    }
+
+    @And("Validate the lastname")
+    public void validateTheLastname() {
+        assertThat(response.body().jsonPath().getString("lastname"),is(Constants.dataMap.get("lastname")));
+
     }
 }

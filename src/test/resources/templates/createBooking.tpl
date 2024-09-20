@@ -2,7 +2,7 @@
     "firstname": "$firstname",
     "lastname": "$lastname",
     "totalprice": $totalprice,
-    "depositpaid": true,
+    "depositpaid": $depositpaid,
     "bookingdates": {
         "checkin": "$checkin",
         "checkout": "$checkout"

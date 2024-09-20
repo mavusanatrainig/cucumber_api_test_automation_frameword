@@ -1,0 +1,1 @@
+{"uuid":"7f79f9a7-a818-4d6b-bc47-37cdeb9cbccb","children":["66c92604-df35-41e1-9346-33e74064793f"],"befores":[],"afters":[{"name":"Hooks.closure()","status":"passed","statusDetails":{"known":false,"muted":false,"flaky":false},"stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1726765594273,"stop":1726765594273}],"start":1726765594272,"stop":1726765594273}

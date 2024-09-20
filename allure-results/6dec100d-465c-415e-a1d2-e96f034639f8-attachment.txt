@@ -1,0 +1,14 @@
+{
+    "bookingid": 6329,
+    "booking": {
+        "firstname": "Veli",
+        "lastname": "Zuma",
+        "totalprice": 2500,
+        "depositpaid": true,
+        "bookingdates": {
+            "checkin": "2024-09-17",
+            "checkout": "2024-09-22"
+        },
+        "additionalneeds": "Breakfast"
+    }
+}
