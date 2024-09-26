@@ -1,0 +1,11 @@
+{
+    "firstname": "$firstname",
+    "lastname": "Zulu",
+    "totalprice": 39,
+    "depositpaid": true,
+    "bookingdates": {
+        "checkin": "$checkin",
+        "checkout": "$checkout"
+    },
+    "additionalneeds": "$additionalneeds"
+}

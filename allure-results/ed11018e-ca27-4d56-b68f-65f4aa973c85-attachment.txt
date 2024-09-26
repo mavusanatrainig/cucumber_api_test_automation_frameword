@@ -1,0 +1,14 @@
+{
+    "bookingid": 2652,
+    "booking": {
+        "firstname": "History",
+        "lastname": "Zulu",
+        "totalprice": 6,
+        "depositpaid": true,
+        "bookingdates": {
+            "checkin": "0NaN-aN-aN",
+            "checkout": "0NaN-aN-aN"
+        },
+        "additionalneeds": "$additionalneeds"
+    }
+}

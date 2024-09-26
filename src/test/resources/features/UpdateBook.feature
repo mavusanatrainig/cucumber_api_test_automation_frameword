@@ -13,3 +13,5 @@ Feature: Update booking
     Examples:
       | firstname | lastname | totalprice | depositpaid | checkin | checkout | additionalneeds |
       | History   | Zulu     | -          | true        | -       | -        | -               |
+      | -         | Zulu     | -          | true        | -       | -        | -               |
+      | -         | -        | -          | -           | -       | -        | -               |

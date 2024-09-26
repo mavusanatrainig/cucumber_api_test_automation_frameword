@@ -2,6 +2,10 @@ package stepdefs;
 
 import com.automation.constants.Constants;
 import com.automation.functions.Library;
+import com.automation.pojos.Customer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.BeforeStep;
 import io.cucumber.java.Scenario;
@@ -15,6 +19,7 @@ import io.restassured.specification.RequestSpecification;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
@@ -27,6 +32,7 @@ public class MyStepdefs {
     private RequestSpecification request;
     private Map<String,String> headers;
     private String payload;
+    private Gson gson;
 
 
     @BeforeStep
@@ -74,9 +80,25 @@ public class MyStepdefs {
     @When("I enter the following data")
     public void iEnterTheFollowingData(DataTable data) {
         Map<String,String> map = data.transpose().asMap();
-        Constants.dataMap = map;
-        payload = Library.createPayLoad("src/test/resources/templates/createBooking.tpl",map);
-        scenario.log(payload);
+        //gson =new Gson();
+        //JsonElement jsonElement = gson.toJsonTree(map);
+
+        //Customer customer = gson.fromJson(jsonElement,Customer.class);
+        //scenario.log(customer.toString());
+       // payload = gson.toJson( jsonElement,Customer.class);
+
+        //scenario.log(payload);
+        ObjectMapper mapper = new ObjectMapper();
+        Customer customer = mapper.convertValue(map, Customer.class);
+        scenario.log(customer.toString());
+
+       // Customer customer = new Customer(map)
+       // scenario.log(customer.toString());
+
+
+        //Constants.dataMap = map;
+        //payload = Library.createPayLoad("src/test/resources/templates/createBooking.tpl",map);
+        //scenario.log(payload);
     }
 
     @And("I post the data to the system")
@@ -93,6 +115,10 @@ public class MyStepdefs {
 
 
         scenario.log(response.getBody().prettyPrint());
+        Customer customer = gson.fromJson(response.getBody().prettyPrint(),Customer.class);
+        scenario.log(customer.getAdditionalneeds());
+
+
     }
 
     @And("the system displayes the booking ID")

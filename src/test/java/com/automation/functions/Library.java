@@ -1,11 +1,13 @@
 package com.automation.functions;
 
+import com.github.javafaker.Faker;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 
 import java.io.StringWriter;
 import java.util.Map;
+import java.util.Random;
 
 public class Library {
 
@@ -16,15 +18,24 @@ public class Library {
         VelocityContext context =  new VelocityContext();
         StringWriter writer = new StringWriter();
         Template template1;
+        Faker faker = new Faker();
         template1 = velocityEngine.getTemplate(template);
         data.forEach((k,v)->{
             if(v.equals("-")){
+                switch (k.toString()){
+                    case "totalprice":
+                        context.put("totalprice", faker.number().randomNumber());
+                    break;
+                              //  "n I enter the following data                                                                          \n" +
+                                //" firstname   | lastname   | totalprice   | depositpaid   | checkin   | checkout   | additionalneeds   ")
+
+                }
 
             }else{
-                data.put(k,v);
+                context.put(k,v);
             }
 
-            context.put(k,v);
+
         });
         template1.merge(context,writer);
         return writer.toString();

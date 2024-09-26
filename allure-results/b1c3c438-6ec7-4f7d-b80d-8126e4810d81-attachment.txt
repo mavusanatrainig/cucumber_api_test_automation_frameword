@@ -1,0 +1,1 @@
+Customer(firstname=-, lastname=Zulu, totalprice=-, depositpaid=true, bookingDates=null, additionalneeds=-)

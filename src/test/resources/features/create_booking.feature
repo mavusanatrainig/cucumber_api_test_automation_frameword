@@ -1,4 +1,4 @@
-@scope
+@create @scope
 Feature: Create a new booking
 
   Scenario Outline: new valid booking
