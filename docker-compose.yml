@@ -1,0 +1,8 @@
+services:
+  postgres:
+    environment:
+      POSTGRES_DB: my_db_name
+      POSTGRES_USER: my_name
+      POSTGRES_PASSWORD: my_password
+  volumes:
+    - ./src/test/resources/data/dummy_dump.sql:/docker-entrypoint-initdb.d/dummy_dump.sql

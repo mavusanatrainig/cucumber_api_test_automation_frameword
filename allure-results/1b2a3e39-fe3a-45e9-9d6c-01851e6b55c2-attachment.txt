@@ -1,0 +1,1 @@
+{"firstname":"Veli","lastname":"Zuma","totalprice":"2500","depositpaid":"true","bookingDates":null,"additionalneeds":"Breakfast"}

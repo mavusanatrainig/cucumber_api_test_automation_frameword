@@ -2,8 +2,11 @@ package stepdefs;
 
 import com.automation.constants.Constants;
 import com.automation.functions.Library;
-import com.automation.pojos.Customer;
+import com.automation.pojos.*;
+import com.beust.ah.A;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.javafaker.Faker;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import io.cucumber.datatable.DataTable;
@@ -16,8 +19,11 @@ import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.apache.commons.math3.analysis.function.Add;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -78,27 +84,47 @@ public class MyStepdefs {
     }
 
     @When("I enter the following data")
-    public void iEnterTheFollowingData(DataTable data) {
+    public void iEnterTheFollowingData(DataTable data) throws JsonProcessingException {
         Map<String,String> map = data.transpose().asMap();
-        //gson =new Gson();
+        Map<String,String> subMap  =  new HashMap<>();
+        map.forEach((k,v)->{
+            if(k.equals("checkin")){
+                subMap.put(k,v);
+
+            }else if(k.equals("checkout")){
+                subMap.put(k,v);
+
+            }
+        });
+
+        scenario.log(subMap.toString());
+        scenario.log(map.toString());
+
+
+        ObjectMapper mapper = new ObjectMapper();
         //JsonElement jsonElement = gson.toJsonTree(map);
 
-        //Customer customer = gson.fromJson(jsonElement,Customer.class);
-        //scenario.log(customer.toString());
+        BookingDates bookingDates = mapper.convertValue(subMap, BookingDates.class);
+        Customer customer = mapper.convertValue(map,Customer.class);
+
+        customer.setBookingdates(bookingDates);
+       // scenario.log(customer.toString());
        // payload = gson.toJson( jsonElement,Customer.class);
 
         //scenario.log(payload);
-        ObjectMapper mapper = new ObjectMapper();
-        Customer customer = mapper.convertValue(map, Customer.class);
+        //ObjectMapper mapper = new ObjectMapper();
+       // Customer customer = mapper.convertValue(map, Customer.class);
         scenario.log(customer.toString());
+        scenario.log(bookingDates.toString());
 
        // Customer customer = new Customer(map)
        // scenario.log(customer.toString());
 
 
+        payload = mapper.writeValueAsString(customer);
         //Constants.dataMap = map;
         //payload = Library.createPayLoad("src/test/resources/templates/createBooking.tpl",map);
-        //scenario.log(payload);
+        scenario.log(payload);
     }
 
     @And("I post the data to the system")
@@ -115,8 +141,8 @@ public class MyStepdefs {
 
 
         scenario.log(response.getBody().prettyPrint());
-        Customer customer = gson.fromJson(response.getBody().prettyPrint(),Customer.class);
-        scenario.log(customer.getAdditionalneeds());
+        //Customer customer = gson.fromJson(response.getBody().prettyPrint(),Customer.class);
+        //scenario.log(customer.getAdditionalneeds());
 
 
     }
@@ -162,5 +188,44 @@ public class MyStepdefs {
     public void validateTheLastname() {
         assertThat(response.body().jsonPath().getString("lastname"),is(Constants.dataMap.get("lastname")));
 
+    }
+
+    @Given("I am")
+    public void iAm() {
+
+    }
+
+    @When("I get data")
+    public void iGetData(DataTable dataTable) throws JsonProcessingException {
+        Map<String,String > data = dataTable.transpose().asMap();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        Faker faker = new Faker();
+
+        Address address = objectMapper.convertValue(data, Address.class);
+
+        PhoneNumber phoneNumber= objectMapper.convertValue(data, PhoneNumber.class);
+        System.out.println(phoneNumber);
+        List<Address> addressList = new ArrayList<>();
+        addressList.add(address);
+        List<PhoneNumber> phoneNumberList = new ArrayList<>();
+        phoneNumberList.add(phoneNumber);
+
+        Student student = objectMapper.convertValue(data,Student.class);
+        student.setFirstname(faker.name().firstName())  ;
+        student.setAddress(addressList);
+        student.setPhoneNumber(phoneNumberList);
+
+                //objectMapper.convertValue(data,Student.class);
+
+
+
+
+
+
+        payload = objectMapper.writeValueAsString(student);
+        scenario.log(payload);
+        System.out.println(payload);
     }
 }

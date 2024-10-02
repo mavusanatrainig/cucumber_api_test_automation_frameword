@@ -11,14 +11,15 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-@JsonIgnoreProperties
+@JsonIgnoreProperties(ignoreUnknown = true)
+
 public class Customer {
 
     String firstname;
     String lastname;
     String totalprice;
     String depositpaid;
-    BookingDates bookingDates;
+    BookingDates bookingdates;
     String additionalneeds;
 
 }

@@ -1,0 +1,1 @@
+{firstname=Vusi, lastname=Pelo, phoneNumber=01123223, mobileNumber=083737615, homeNumber=10111, address_line1=44564 Junha, city=Johannesburg, Province=Gauteng, PostalCode=2200}
