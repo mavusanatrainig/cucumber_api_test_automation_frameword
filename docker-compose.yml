@@ -1,8 +1,11 @@
 services:
   postgres:
+    image: postgres:14-alpine
+    ports:
+      - 5432:5432
     environment:
-      POSTGRES_DB: my_db_name
-      POSTGRES_USER: my_name
-      POSTGRES_PASSWORD: my_password
-  volumes:
-    - ./src/test/resources/data/dummy_dump.sql:/docker-entrypoint-initdb.d/dummy_dump.sql
+      POSTGRES_DB: training
+      POSTGRES_USER: vusi
+      POSTGRES_PASSWORD: password
+    volumes:
+        - ./src/test/resources/data/northwind.sql:/docker-entrypoint-initdb.d/northwind.sql
