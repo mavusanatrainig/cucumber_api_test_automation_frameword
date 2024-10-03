@@ -1,7 +1,4 @@
-import com.automation.pojos.Address;
-import com.automation.pojos.BookingDates;
-import com.automation.pojos.Customer;
-import com.automation.pojos.PhoneNumber;
+import com.automation.pojos.*;
 import com.beust.ah.A;
 import com.google.gson.Gson;
 
@@ -17,17 +14,22 @@ public class Executable {
         List<Address> addressList = new ArrayList<>();
         List<PhoneNumber> phoneNumberList = new ArrayList<>();
 
+        addressList.add(address);
+        phoneNumberList.add(phoneNumber);
+
+        Student student = new Student("Vusi","Nkosi",addressList,phoneNumberList);
+
 //        addressList.add(address);
 //        phoneNumberList.add(phoneNumber);
 //
-//       Customer customer = new Customer("Vusi","Pelo","2000","true",new BookingDates("23-09-2024","30-09-2024"),"Breakfast");
+         // Customer customer = new Customer("Vusi","Pelo","2000","true",new BookingDates("23-09-2024","30-09-2024"),"Breakfast");
 //
-//       System.out.println(customer.toString());
 //
-//        Gson gson = new Gson();
-//        String customer_json = gson.toJson(customer);
 //
-//       // System.out.println(customer_json);
+        Gson gson = new Gson();
+        String customer_json = gson.toJson(student);
+//
+     System.out.println(customer_json);
 //    }
     }
 }
