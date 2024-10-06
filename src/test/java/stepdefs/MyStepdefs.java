@@ -21,6 +21,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.apache.commons.math3.analysis.function.Add;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,12 +40,13 @@ public class MyStepdefs {
     private Map<String,String> headers;
     private String payload;
     private Gson gson;
+    Connection connection;
 
 
     @BeforeStep
-    public void startup(Scenario scenario){
+    public void startup(Scenario scenario) throws SQLException {
        this.scenario = scenario;
-
+        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/training", "vusi", "password");
     }
 
 
@@ -218,14 +220,25 @@ public class MyStepdefs {
         student.setPhoneNumber(phoneNumberList);
 
                 //objectMapper.convertValue(data,Student.class);
-
-
-
-
-
-
         payload = objectMapper.writeValueAsString(student);
         scenario.log(payload);
         System.out.println(payload);
+    }
+
+
+    @Given("I have an apple")
+    public void iHaveAnApple() {
+
+    }
+
+    @When("I bite it using the data")
+    public void iBiteItUsingTheData(DataTable table) throws SQLException {
+        Map<String,String> map = table.transpose().asMap();
+        Statement st = connection.createStatement();
+        String strQuery = "SELECT  product_id,product_name,units_in_stock,unit_price FROM public.products WHERE product_id = " +
+                map.get("product_id") + " ORDER BY product_id ASC LIMIT 100";
+        ResultSet resultSet = st.executeQuery(strQuery);
+        resultSet.next();
+
     }
 }

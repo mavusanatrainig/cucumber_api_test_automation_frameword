@@ -8,4 +8,4 @@ services:
       POSTGRES_USER: vusi
       POSTGRES_PASSWORD: password
     volumes:
-        - ./src/test/resources/data/northwind.sql:/docker-entrypoint-initdb.d/northwind.sql
+     - ./src/test/resources/data/northwind.sql:/docker-entrypoint-initdb.d/northwind.sql
