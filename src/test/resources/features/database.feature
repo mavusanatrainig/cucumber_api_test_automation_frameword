@@ -1,11 +1,11 @@
-
+@data
   Feature: Test using DB
     Scenario Outline: TestDB
       Given I have an apple
       When I bite it using the data
         |product_id|
         |<product_id>|
-      Then The apple turn in to an orange
+
 
       Examples:
         |product_id|

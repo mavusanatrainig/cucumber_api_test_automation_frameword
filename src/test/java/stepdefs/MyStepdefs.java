@@ -2,6 +2,7 @@ package stepdefs;
 
 import com.automation.constants.Constants;
 import com.automation.functions.Library;
+import com.automation.pages.DatabaseSetup;
 import com.automation.pojos.*;
 import com.beust.ah.A;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,7 +21,8 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.apache.commons.math3.analysis.function.Add;
-
+import com.automation.pages.ProductPage;
+import io.cucumber.datatable.DataTable;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +35,8 @@ import static org.hamcrest.Matchers.*;
 
 
 
+
+
 public class MyStepdefs {
     private Scenario scenario;
     private Response response;
@@ -41,6 +45,10 @@ public class MyStepdefs {
     private String payload;
     private Gson gson;
     Connection connection;
+    private DatabaseSetup databaseSetup;
+    private ProductPage productPage;
+
+
 
 
     @BeforeStep
@@ -227,18 +235,27 @@ public class MyStepdefs {
 
 
     @Given("I have an apple")
-    public void iHaveAnApple() {
-
+    public void iHaveAnApple() throws SQLException {
+        databaseSetup = new DatabaseSetup();
+        connection = databaseSetup.getConnection();
     }
 
     @When("I bite it using the data")
     public void iBiteItUsingTheData(DataTable table) throws SQLException {
-        Map<String,String> map = table.transpose().asMap();
-        Statement st = connection.createStatement();
-        String strQuery = "SELECT  product_id,product_name,units_in_stock,unit_price FROM public.products WHERE product_id = " +
-                map.get("product_id") + " ORDER BY product_id ASC LIMIT 100";
-        ResultSet resultSet = st.executeQuery(strQuery);
-        resultSet.next();
+        Map<String, String> map = table.transpose().asMap(String.class, String.class);
 
+
+        productPage = new ProductPage(connection);
+        List<Products> products = productPage.getProductsById(map.get("product_id"));
+
+        products.forEach(product -> System.out.println(product.toString()));
+    }
+
+
+    @Given("I close the connection")
+    public void closeDatabaseConnection() throws SQLException {
+        if (databaseSetup != null) {
+            connection.close();
+        }
     }
 }
