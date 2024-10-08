@@ -254,22 +254,23 @@ public class MyStepdefs {
 
         Map<String,String> mapProduct = new HashMap<>();
 
-        resultSet.next();
+       /* resultSet.next();
 
         mapProduct.put("product_id",resultSet.getString("product_id"));
         mapProduct.put("product_name",resultSet.getString("product_name"));
         mapProduct.put("units_in_stock",resultSet.getString("units_in_stock"));
         mapProduct.put("unit_price",resultSet.getString("unit_price"));
+*/
 
-        /*int i =1;
 
         while (resultSet.next()){
 
-            scenario.log(resultSet.getMetaData().getColumnName(i) + " " +resultSet.getString(resultSet.getMetaData().getColumnName(i)));
+            for(int i=1 ; i<=resultSet.getMetaData().getColumnCount(); i++){
+                mapProduct.put(resultSet.getMetaData().getColumnName(i),resultSet.getString(resultSet.getMetaData().getColumnName(i)));
 
-            mapProduct.put(resultSet.getMetaData().getColumnName(i),resultSet.getString(resultSet.getMetaData().getColumnName(i)));
-            i++;
-        }*/
+            }
+
+        }
 
         ObjectMapper mapper = new ObjectMapper();
         Product product = mapper.convertValue(mapProduct,Product.class);
@@ -285,5 +286,9 @@ public class MyStepdefs {
 
 
 
+    }
+
+    @Then("The apple turn in to an orange")
+    public void theAppleTurnInToAnOrange() {
     }
 }

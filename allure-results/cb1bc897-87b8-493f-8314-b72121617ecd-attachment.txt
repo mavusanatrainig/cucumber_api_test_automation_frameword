@@ -1,0 +1,1 @@
+DatabaseConfiguration(Host=localhost, DBName=training, Username=vusi, Password=password)
