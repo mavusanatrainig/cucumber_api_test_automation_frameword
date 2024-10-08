@@ -1,4 +1,4 @@
-
+  @apple
   Feature: Test using DB
     Scenario Outline: TestDB
       Given I have an apple

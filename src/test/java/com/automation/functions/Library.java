@@ -6,6 +6,9 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 
 import java.io.StringWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.Random;
 
@@ -40,6 +43,12 @@ public class Library {
         template1.merge(context,writer);
         return writer.toString();
 
+
+    }
+
+    public static Connection getDatabaseConnection(String Host, String DBName, String Username, String Password  ) throws SQLException {
+
+        return  DriverManager.getConnection("jdbc:postgresql://"+Host+":5432/"+DBName ,Username, Password);
 
     }
 }

@@ -20,7 +20,11 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.apache.commons.math3.analysis.function.Add;
+import org.json.simple.JSONObject;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,14 +43,23 @@ public class MyStepdefs {
     private RequestSpecification request;
     private Map<String,String> headers;
     private String payload;
-    private Gson gson;
+
+
     Connection connection;
 
 
     @BeforeStep
-    public void startup(Scenario scenario) throws SQLException {
+    public void startup(Scenario scenario) throws SQLException, IOException {
        this.scenario = scenario;
-        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/training", "vusi", "password");
+        ObjectMapper mapper = new ObjectMapper();
+
+
+        Path path = Path.of("src/test/resources/config/dbconfig.json");
+
+       DatabaseConfiguration configuration = mapper.readValue(Files.readString(path),DatabaseConfiguration.class);
+       scenario.log(configuration.toString());
+       connection = Library.getDatabaseConnection(configuration.getHost(),configuration.getDBName(),configuration.getUsername(),configuration.getPassword());
+        //connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/training", "vusi", "password");
     }
 
 
@@ -232,13 +245,45 @@ public class MyStepdefs {
     }
 
     @When("I bite it using the data")
-    public void iBiteItUsingTheData(DataTable table) throws SQLException {
+    public void iBiteItUsingTheData(DataTable table) throws SQLException, JsonProcessingException {
         Map<String,String> map = table.transpose().asMap();
         Statement st = connection.createStatement();
         String strQuery = "SELECT  product_id,product_name,units_in_stock,unit_price FROM public.products WHERE product_id = " +
-                map.get("product_id") + " ORDER BY product_id ASC LIMIT 100";
+                map.get("product_id") + " ORDER BY product_id ASC LIMIT 1";
         ResultSet resultSet = st.executeQuery(strQuery);
+
+        Map<String,String> mapProduct = new HashMap<>();
+
         resultSet.next();
+
+        mapProduct.put("product_id",resultSet.getString("product_id"));
+        mapProduct.put("product_name",resultSet.getString("product_name"));
+        mapProduct.put("units_in_stock",resultSet.getString("units_in_stock"));
+        mapProduct.put("unit_price",resultSet.getString("unit_price"));
+
+        /*int i =1;
+
+        while (resultSet.next()){
+
+            scenario.log(resultSet.getMetaData().getColumnName(i) + " " +resultSet.getString(resultSet.getMetaData().getColumnName(i)));
+
+            mapProduct.put(resultSet.getMetaData().getColumnName(i),resultSet.getString(resultSet.getMetaData().getColumnName(i)));
+            i++;
+        }*/
+
+        ObjectMapper mapper = new ObjectMapper();
+        Product product = mapper.convertValue(mapProduct,Product.class);
+        payload = mapper.writeValueAsString(product);
+
+        scenario.log(payload);
+
+
+
+
+
+
+
+
 
     }
 }
